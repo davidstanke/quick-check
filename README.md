@@ -17,7 +17,7 @@ This folder contains the Quick Check implementation. It's a Single Page Applicat
 
 ## Temporary features
 
-These features are temporary and should be removed or refactored by the daate specified.
+These features are temporary and should be removed or refactored by the date specified.
 
 ### Comparison by industry size
 
