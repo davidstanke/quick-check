@@ -1,15 +1,18 @@
 <script>
     //@ts-nocheck
-    import { createEventDispatcher } from "svelte";
-    export let capability;
-    export let capability_count;
-    export let current_capability_index;
+    let {
+        capability,
+        capability_count,
+        current_capability_index,
+        this_capability_responses = $bindable(),
+        onnextCapability,
+    } = $props();
 
-    // initialize user response data with dummy values
-    export let this_capability_responses;
-    let thisCapabilityCompleted = false;
-
-    const dispatch = createEventDispatcher();
+    // has user entered a value for every question of this capability?
+    let thisCapabilityCompleted = $derived(
+        this_capability_responses.length == capability.questions.length &&
+            this_capability_responses.every((x) => x !== -1),
+    );
 
     function nextCapability() {
         // push data to URL
@@ -24,7 +27,7 @@
             }
             window.history.replaceState({}, "", url);
         }
-        dispatch("nextCapability");
+        onnextCapability?.();
     }
 
     let response_options = [
@@ -34,11 +37,6 @@
         "Agree",
         "Strongly agree",
     ];
-
-    // has user entered a value for every question of this capability?
-    $: thisCapabilityCompleted = this_capability_responses.length == capability.questions.length && this_capability_responses.every(
-        (x) => x !== -1,
-    );
 </script>
 
 <section>
@@ -82,7 +80,7 @@
     </table>
 
     <div class="next">
-        <button on:click={nextCapability} disabled={!thisCapabilityCompleted}>
+        <button onclick={nextCapability} disabled={!thisCapabilityCompleted}>
             {#if current_capability_index < capability_count - 1}Next{:else}View
                 Results{/if}</button
         >
