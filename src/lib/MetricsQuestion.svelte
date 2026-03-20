@@ -1,12 +1,8 @@
 <script>
   //@ts-nocheck
-  import { createEventDispatcher } from "svelte";
   import { fade } from "svelte/transition";
-  export let metrics;
-  export let metric_name = "METRIC",
-    metric_position = 1,
-    current_metric = 0,
-    displayMode = "embedded";
+  let { metrics = $bindable(), metric_name = "METRIC", metric_position = 1, current_metric = $bindable(0), displayMode = "embedded", onnextMetric } = $props();
+
   import metrics_question_responses from "./data/metrics_question_responses.json";
   import metrics_images from "./data/metrics_images.json";
   const metrics_details = {
@@ -32,12 +28,10 @@
     },
   };
 
-  let metric_friendly_name = metrics_details[metric_name]["friendly_name"];
-  let metric_question_text = metrics_details[metric_name].description;
+  let metric_friendly_name = $derived(metrics_details[metric_name]["friendly_name"]);
+  let metric_question_text = $derived(metrics_details[metric_name].description);
 
-  const dispatch = createEventDispatcher();
-
-  const nextMetric = () => dispatch("nextMetric");
+  const nextMetric = () => onnextMetric?.();
 </script>
 
 <!-- TODO: images on this page are inlined from "metrics_image.json" ... we should be able to use Vite to inline them automatically from static image files, which will make the source cleaner -->
@@ -69,7 +63,7 @@
                 name="changefailure"
                 min="0"
                 max="100"
-                on:change={nextMetric}
+                onchange={nextMetric}
                 bind:value={metrics["changefailure"]}
               />
               <echo>
@@ -98,7 +92,7 @@
                   name="changefailure"
                   type="radio"
                   bind:group={metrics["changefailure"]}
-                  on:change={nextMetric}
+                  onchange={nextMetric}
                   value={value * 10}
                 />{value * 10}%</label
               >
@@ -111,7 +105,7 @@
                 name={metric_name}
                 type="radio"
                 bind:group={metrics[metric_name]}
-                on:change={nextMetric}
+                onchange={nextMetric}
                 {value}
               />{text}</label
             >

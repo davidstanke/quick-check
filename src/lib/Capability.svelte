@@ -10,7 +10,7 @@
 
     // has user entered a value for every question of this capability?
     let thisCapabilityCompleted = $derived(
-        this_capability_responses.length == capability.questions.length &&
+        this_capability_responses.length === capability.questions.length &&
             this_capability_responses.every((x) => x !== -1),
     );
 
@@ -22,7 +22,7 @@
                 capability.shortname,
                 this_capability_responses.join(""),
             );
-            if (current_capability_index == capability_count - 1) {
+            if (current_capability_index === capability_count - 1) {
                 url.searchParams.set("step", "priorities");
             }
             window.history.replaceState({}, "", url);
@@ -30,7 +30,7 @@
         onnextCapability?.();
     }
 
-    let response_options = [
+    const response_options = [
         "Strongly disagree",
         "Disagree",
         "Neither agree nor disagree",
@@ -45,7 +45,7 @@
     </h3>
     <p>
         {capability.description}
-        <a href={capability.article_url} target="_blank">learn more</a>
+        <a href={capability.article_url} target="_blank" rel="noopener noreferrer">learn more</a>
     </p>
     <table>
         <thead>
@@ -62,16 +62,17 @@
                     <td>{question.question_text}</td>
                     {#each response_options as option_text, idx}
                         <td>
-                            <label
-                                ><input
+                            <label>
+                                <input
                                     type="radio"
                                     name={`${capability.shortname}_${question.number}`}
                                     value={idx + 1}
                                     bind:group={this_capability_responses[
                                         question.number - 1
                                     ]}
-                                /><span>{option_text}</span></label
-                            >
+                                />
+                                <span>{option_text}</span>
+                            </label>
                         </td>
                     {/each}
                 </tr>
@@ -81,11 +82,14 @@
 
     <div class="next">
         <button onclick={nextCapability} disabled={!thisCapabilityCompleted}>
-            {#if current_capability_index < capability_count - 1}Next{:else}View
-                Results{/if}</button
-        >
+            {#if current_capability_index < capability_count - 1}
+                Next
+            {:else}
+                View Results
+            {/if}
+        </button>
         <!-- Vite provides environment variables; if running in dev, show some debug -->
-        {#if typeof import.meta.env.MODE != "undefined" && import.meta.env.MODE === "development"}
+        {#if typeof import.meta.env?.MODE !== "undefined" && import.meta.env.MODE === "development"}
             <div>
                 debug: index = {current_capability_index}<br />
                 debug: thisCapabilityCompleted = {thisCapabilityCompleted}<br />
