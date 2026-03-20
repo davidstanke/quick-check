@@ -21,4 +21,4 @@ You have access to the following agents. Use them whenever possible:
 * `svelte-modernizer`: for updating code to Svelte 5 conventions
 
 ## Output Format
-Return the refactored code. Provide extremely concise explanations.
+Return a summary of refactors you have made. Don't return raw code unless necessary to explain what you did.
