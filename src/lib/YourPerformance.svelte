@@ -14,7 +14,13 @@
         leadtime: -1,
         deployfreq: -1,
         changefailure: -1,
-        failurerecovery: -1,
+    let performance_average = $derived((
+        (metrics_recoded.leadtime +
+            metrics_recoded.deployfreq +
+            metrics_recoded.changefailure +
+            metrics_recoded.failurerecovery) /
+        4
+    ).toFixed(1));
     });
     let performance_average = $state(0);
     let industry_metrics = $state(industry_metrics_data); // Default to industry_metrics
