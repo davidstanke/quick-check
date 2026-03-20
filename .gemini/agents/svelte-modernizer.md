@@ -9,7 +9,7 @@ tools:
   - replace
   - list_directory
   - glob
-max_turns: 10
+max_turns: 2
 timeout_mins: 3
 ---
 
