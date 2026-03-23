@@ -11,19 +11,19 @@
     import NextSteps from "./lib/kiosk/NextSteps.svelte";
     import StartOver from "./lib/kiosk/StartOver.svelte";
 
-    let metrics = {
+    let metrics = $state({
         leadtime: -1,
         deployfreq: -1,
         changefailure: -1,
         failurerecovery: -1,
-    };
+    });
 
-    let step = "input";
-    let industry = "all";
-    let current_capability = -1;
-    let metric_names = Object.keys(metrics);
-    let current_metric = 0; // in kiosk mode, metrics questions are presented one at a time
-    let displayMode = "embedded";
+    let step = $state("input");
+    let industry = $state("all");
+    let current_capability = $state(-1);
+    let metric_names = $derived(Object.keys(metrics));
+    let current_metric = $state(0); // in kiosk mode, metrics questions are presented one at a time
+    let displayMode = $state("embedded");
 
     function saveURLParams() {
         // in kiosk mode, don't populate URL (b/c user can't easily copy-paste it)
@@ -144,7 +144,7 @@
                     {#if current_metric > 0}
                         {#key step} <!-- re initialize this widget on every change of step or current_metric -->
                             {#key current_metric}
-                                <StartOver on:reset={reset} {displayMode} />
+                                <StartOver onreset={reset} {displayMode} />
                             {/key}
                         {/key}
                     {/if}
@@ -156,14 +156,14 @@
                         metric_name={metric_names[current_metric]}
                         metric_position={current_metric}
                         {displayMode}
-                        on:nextMetric={nextMetric}
+                        onnextMetric={nextMetric}
                     />
                 {/key}
             </div>
         {:else if step === "results"}
             <div class="yourPerformance">
                 <YourPerformance {metrics} bind:industry {displayMode} />
-                <NextSteps {displayMode} on:reset={reset} />
+                <NextSteps {displayMode} onreset={reset} />
             </div>
         {/if}
     {:else}
@@ -173,7 +173,7 @@
                     bind:metrics
                     metric_name={metric}
                     metric_position={idx}
-                    on:nextMetric={nextMetric}
+                    onnextMetric={nextMetric}
                 />
             {/each}
             <section class="submit">
@@ -181,7 +181,7 @@
                     disabled={!metric_names.every(
                         (metric) => metrics[metric] != -1,
                     )}
-                    on:click={showResults}>View Results</button
+                    onclick={showResults}>View Results</button
                 >
             </section>
         {:else if step === "results" || step === "priorities"}

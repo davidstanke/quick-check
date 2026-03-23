@@ -9,12 +9,12 @@
 
     import capability_prioritization_questions from "./data/capability_prioritization_questions.json";
 
-    export let current_capability = -1;
+    let { current_capability = $bindable(-1) } = $props();
     let capability_count = capability_prioritization_questions.length;
-    let capability_dom_elements = [];
-    let capability_container;
+    let capability_dom_elements = $state([]);
+    let capability_container = $state();
 
-    let capability_responses = {};
+    let capability_responses = $state({});
     capability_prioritization_questions.forEach((capability) => {
         capability_responses[capability.shortname] = [];
     });
@@ -101,7 +101,7 @@
                     bind:this_capability_responses={capability_responses[
                         capability.shortname
                     ]}
-                    on:nextCapability={nextCapability}
+                    onnextCapability={nextCapability}
                 />
             </div>
         {/each}

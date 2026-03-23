@@ -1,9 +1,7 @@
 <script>
     import PrioritizationResult from "./PrioritizationResult.svelte";
 
-    export let capability_prioritization_questions;
-
-    export let capability_responses;
+    let { capability_prioritization_questions, capability_responses } = $props();
 </script>
 
 <div class="prioritize_step">

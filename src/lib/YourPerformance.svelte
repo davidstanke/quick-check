@@ -8,20 +8,20 @@
     import organization_size_metrics from "./data/organization_size_metrics.json";
     import industry_metrics_data from "./data/industry_metrics.json";
 
-    export let metrics, industry, displayMode;
+    let { metrics, industry = $bindable(), displayMode } = $props();
 
-    let metrics_recoded = {
+    let metrics_recoded = $state({
         leadtime: -1,
         deployfreq: -1,
         changefailure: -1,
         failurerecovery: -1,
-    };
-    let performance_average = 0;
-    let industry_metrics = industry_metrics_data; // Default to industry_metrics
-    let comparisonType = "industry"; // Default comparison type
-    let currentIndustry = industry; // Track the current industry value
+    });
+    
+    let industry_metrics = $state(industry_metrics_data); // Default to industry_metrics
+    let comparisonType = $state("industry"); // Default comparison type
+    let currentIndustry = $state(industry); // Track the current industry value
 
-    const calculate_recoded_metrics = () => {
+    function calculate_recoded_metrics() {
         // inputs for these metrics range from 1 to 6; recode to a 0-10 scale
         metrics_recoded.leadtime = recode_numeric_range(
             parseInt(metrics.leadtime),
@@ -55,7 +55,7 @@
                 0, // output_max
             ),
         );
-    };
+    }
 
     const setIndustryInURL = (industry) => {
         if (typeof window !== "undefined") {
@@ -87,15 +87,22 @@
         }
     });
 
-    $: metrics, calculate_recoded_metrics();
-    $: performance_average = (
-        (metrics_recoded.leadtime +
-            metrics_recoded.deployfreq +
-            metrics_recoded.changefailure +
-            metrics_recoded.failurerecovery) /
-        4
-    ).toFixed(1);
-    $: {
+    $effect(() => {
+        metrics;
+        calculate_recoded_metrics();
+    });
+
+    let performance_average = $derived(
+        (
+            (metrics_recoded.leadtime +
+                metrics_recoded.deployfreq +
+                metrics_recoded.changefailure +
+                metrics_recoded.failurerecovery) /
+            4
+        ).toFixed(1)
+    );
+
+    $effect(() => {
         if (!industry_metrics[industry]) {
             currentIndustry = "all"; // Reset to "all" if not found
             console.warn(`Industry "${industry}" not found in ${comparisonType} dataset. Resetting to "all".`);
@@ -104,19 +111,24 @@
         } else {
             currentIndustry = industry;
         }
-    }
-    $: selected_industry_metrics = industry_metrics[currentIndustry];
-    $: setIndustryInURL(currentIndustry);
-    $: comparisonText = comparisonType === "industry" ? "Compare to industry benchmark:" : "Compare to organization size benchmark:";
-    $: baselineText = comparisonType === "industry" ? `2024 Industry baseline (${industry_metrics[industry]["name"]}):` : `2024 Organization size benchmark (${industry_metrics[currentIndustry]["name"]}):`;
+    });
+
+    let selected_industry_metrics = $derived(industry_metrics[currentIndustry]);
+    
+    $effect(() => {
+        setIndustryInURL(currentIndustry);
+    });
+
+    let comparisonText = $derived(comparisonType === "industry" ? "Compare to industry benchmark:" : "Compare to organization size benchmark:");
+    let baselineText = $derived(comparisonType === "industry" ? `2024 Industry baseline (${industry_metrics[industry]["name"]}):` : `2024 Organization size benchmark (${industry_metrics[currentIndustry]["name"]}):`);
 </script>
 
 <div class="heading">
     <h1 id="results">Your software delivery performance</h1>
     {comparisonText}
     <select bind:value={industry}>
-        {#each Object.entries(industry_metrics) as [industry, industry_data]}
-            <option value={industry}>{industry_data["name"]}</option>
+        {#each Object.entries(industry_metrics) as [industry_key, industry_data]}
+            <option value={industry_key}>{industry_data["name"]}</option>
         {/each}
     </select>
 </div>

@@ -2,23 +2,19 @@
     //@ts-nocheck
     import { arrayAverage, recode_numeric_range } from "./utils";
 
-    export let question;
-    export let this_capability_responses;
-    let this_capability_recoded_average = 0;
+    let { question, this_capability_responses } = $props();
 
-    let this_capability_recoded_responses = [];
+    let this_capability_recoded_responses = $derived(
+        this_capability_responses.map((response) => 
+            recode_numeric_range(response, 1, 5, 0, 10)
+        )
+    );
 
-    $: this_capability_responses.forEach((response, _) => {
-        this_capability_recoded_responses = [
-            ...this_capability_recoded_responses,
-            recode_numeric_range(response, 1, 5, 0, 10),
-        ];
-    });
-
-    $: this_capability_recoded_average =
+    let this_capability_recoded_average = $derived(
         this_capability_recoded_responses.length
             ? arrayAverage(this_capability_recoded_responses).toFixed(1)
-            : 0;
+            : 0
+    );
 </script>
 
 <div class="prioritization_result">
