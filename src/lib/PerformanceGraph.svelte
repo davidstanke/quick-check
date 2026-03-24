@@ -1,14 +1,25 @@
 <script>
-    export let user_score,
+    /**
+     * @typedef {Object} Props
+     * @property {any} user_score
+     * @property {any} industry_score
+     * @property {any} displayMode
+     * @property {number} [std]
+     * @property {any} [tickmarks]
+     * @property {boolean} [featured]
+     */
+
+    /** @type {Props} */
+    let {
+        user_score,
         industry_score,
         displayMode,
         std = 0,
-        tickmarks = [];
-    export let featured = false;
+        tickmarks = [],
+        featured = false
+    } = $props();
 
-    let user_score_position = "0%";
-
-    $: user_score_position = `${user_score * 10}%`;
+    let user_score_position = $derived(`${user_score * 10}%`);
 </script>
 
 <div class="graph {displayMode}" class:featured>

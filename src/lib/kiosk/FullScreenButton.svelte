@@ -1,5 +1,5 @@
 <script>
-    let fullscreen = false;
+    let fullscreen = $state(false);
 
     let fullscreen_modes = {
         false: "fullscreen_exit",
@@ -21,7 +21,7 @@
 <span
     class="google-material-icons"
     id="fullscreen_container"
-    on:click={() => {
+    onclick={() => {
         toggleFullScreen();
     }}>{fullscreen_modes[!fullscreen]}</span
 >

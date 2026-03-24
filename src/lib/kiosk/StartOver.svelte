@@ -1,44 +1,37 @@
 <script>
-    import { createEventDispatcher } from "svelte";
-    import { onMount } from "svelte";
-    import { onDestroy } from "svelte";
+    /**
+     * @typedef {Object} Props
+     * @property {string} [displayMode]
+     * @property {function} [onreset]
+     */
 
-    export let displayMode = "kiosk";
+    /** @type {Props} */
+    let { displayMode = "kiosk", onreset } = $props();
 
     const TIMER_DURATION_IN_SEC = 90;
     const TIMER_HIDDEN_FOR_SEC = 60;
 
-    let seconds_remaining = TIMER_DURATION_IN_SEC;
-
-    const dispatch = createEventDispatcher();
-
-    let countDownTimer;
+    let seconds_remaining = $state(TIMER_DURATION_IN_SEC);
 
     const reset = () => {
         seconds_remaining = TIMER_DURATION_IN_SEC;
-        dispatch("reset");
+        onreset?.();
     };
 
-    function countDown() {
-        if (seconds_remaining === 1) {
-            reset();
-        } else {
-            seconds_remaining--;
-            countDownTimer = setTimeout(countDown, 1000);
-        }
-    }
-
-    onMount(() => {
-        console.log("hi");
-        countDown();
+    $effect(() => {
+        const interval = setInterval(() => {
+            if (seconds_remaining === 1) {
+                reset();
+            } else {
+                seconds_remaining--;
+            }
+        }, 1000);
+        return () => clearInterval(interval);
     });
-    onDestroy(() => {
-        clearTimeout(countDownTimer);
-    })
 </script>
 
 <div class="container {displayMode}">
-    <a href="." on:click|preventDefault={reset} class="reset">start over</a>
+    <a href="." onclick={(e) => { e.preventDefault(); reset(); }} class="reset">start over</a>
     <div class="auto-reset"> 
         {#if seconds_remaining <= TIMER_DURATION_IN_SEC - TIMER_HIDDEN_FOR_SEC}
             starting over in {seconds_remaining}s
