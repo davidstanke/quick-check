@@ -2,14 +2,14 @@
     // @ts-nocheck
 
     import { onMount } from "svelte";
-    import MetricsQuestion from "./lib/MetricsQuestion.svelte";
-    import YourPerformance from "./lib/YourPerformance.svelte";
-    import HelpMePrioritize from "./lib/HelpMePrioritize.svelte";
-    import GoFurther from "./lib/GoFurther.svelte";
-    import { sendAnalyticsEvent } from "./lib/utils.js";
-    import FullScreenButton from "./lib/kiosk/FullScreenButton.svelte";
-    import NextSteps from "./lib/kiosk/NextSteps.svelte";
-    import StartOver from "./lib/kiosk/StartOver.svelte";
+    import MetricsQuestion from "$lib/MetricsQuestion.svelte";
+    import YourPerformance from "$lib/YourPerformance.svelte";
+    import HelpMePrioritize from "$lib/HelpMePrioritize.svelte";
+    import GoFurther from "$lib/GoFurther.svelte";
+    import { sendAnalyticsEvent } from "$lib/utils.js";
+    import FullScreenButton from "$lib/kiosk/FullScreenButton.svelte";
+    import NextSteps from "$lib/kiosk/NextSteps.svelte";
+    import StartOver from "$lib/kiosk/StartOver.svelte";
 
     let metrics = {
         leadtime: -1,
