@@ -7,6 +7,9 @@ description: Test the DORA Quick Check application by navigating through the kio
 
 This skill automates the testing of the DORA Quick Check application. It starts the development server, navigates through the 4 questions in kiosk mode using random selections, and confirms that the results page is displayed.
 
+## 🚫 Constraints
+**NEVER** change the application mode. Leave it in Kiosk mode.
+
 ## Prerequisites
 
 - Node.js and npm installed.
