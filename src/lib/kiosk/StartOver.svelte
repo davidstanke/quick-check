@@ -8,6 +8,8 @@
 
     let seconds_remaining = TIMER_DURATION_IN_SEC;
 
+    export let showLegendLink = false;
+
     const dispatch = createEventDispatcher();
 
     let countDownTimer;
@@ -17,26 +19,18 @@
         dispatch("reset");
     };
 
-    function countDown() {
-        if (seconds_remaining === 1) {
-            reset();
-        } else {
-            seconds_remaining--;
-            countDownTimer = setTimeout(countDown, 1000);
-        }
-    }
-
-    onMount(() => {
-        console.log("hi");
-        countDown();
-    });
-    onDestroy(() => {
-        clearTimeout(countDownTimer);
-    })
+    const toggleLegend = () => {
+        dispatch("toggleLegend");
+    };
 </script>
 
 <div class="container">
-    <a href="." on:click|preventDefault={reset} class="reset">start over</a>
+    <div class="buttons">
+        <a href="." on:click|preventDefault={reset} class="reset">start over</a>
+        {#if showLegendLink}
+            <a href="." on:click|preventDefault={toggleLegend} class="legend-link">legend</a>
+        {/if}
+    </div>
     <div class="auto-reset"> 
         {#if seconds_remaining <= TIMER_DURATION_IN_SEC - TIMER_HIDDEN_FOR_SEC}
             starting over in {seconds_remaining}s
@@ -49,19 +43,29 @@
         text-align: center;
     }
 
-    a.reset {
+    .buttons {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    a.reset, a.legend-link {
         display: inline-block;
         border: 1px solid #ccc;
         border-radius: 0.5rem;
         padding: 0.25rem 0.5rem;
-        margin: 0 3rem;
         color: #999;
         text-decoration: none;
         font-size: 1.5rem;
     }
 
-    div.auto-reset {
-        font-size: 1rem;
-        color: #999;
+    a.reset {
+        margin: 0 1rem;
+    }
+
+    a.legend-link {
+        border-color: var(--dora-blue, #0044cc);
+        color: var(--dora-blue, #0044cc);
     }
 </style>

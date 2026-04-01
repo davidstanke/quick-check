@@ -109,6 +109,9 @@
     $: setIndustryInURL(currentIndustry);
     $: comparisonText = comparisonType === "industry" ? "Compare to industry benchmark:" : "Compare to organization size benchmark:";
     $: baselineText = comparisonType === "industry" ? `2024 Industry baseline (${industry_metrics[industry]["name"]}):` : `2024 Organization size benchmark (${industry_metrics[currentIndustry]["name"]}):`;
+
+    export let showLegend = false;
+    const closeLegend = () => showLegend = false;
 </script>
 
 <div class="heading">
@@ -221,22 +224,28 @@
             />
         </div>
     </section>
-    <section class="legend">
-        <div class="legend-header">
-            <span>
-            {baselineText}
-            </span>
+
+    {#if showLegend}
+        <div class="legend-overlay" on:click={closeLegend}>
+            <section class="legend" on:click|stopPropagation>
+                <button class="close-button" on:click={closeLegend}>&times;</button>
+                <div class="legend-header">
+                    <span>
+                    {baselineText}
+                    </span>
+                </div>
+                <div class="legend-item">
+                    <span class="industry">&nbsp;</span> Average
+                </div>
+                <div class="legend-item">
+                    <span class="std">&nbsp;</span> Standard deviation
+                </div>
+                <div class="legend-item">
+                    <span class="your">&nbsp;</span> Your performance
+                </div>
+            </section>
         </div>
-        <div class="legend-item">
-            <span class="industry">&nbsp;</span> Average
-        </div>
-        <div class="legend-item">
-            <span class="std">&nbsp;</span> Standard deviation
-        </div>
-        <div class="legend-item">
-            <span class="your">&nbsp;</span> Your performance
-        </div>
-    </section>
+    {/if}
 </div>
 
 <style lang="scss">
@@ -247,6 +256,7 @@
     .YourPerformance {
         display: flex;
         flex-direction: row;
+        position: relative;
 
         .performance-graphs {
             display: grid;
@@ -280,29 +290,54 @@
                 }
             }
         }
-        .legend {
-            display: flex;
-            flex-direction: column; /* Stack items vertically */
-            align-items: flex-start; /* Align items to the start of the container */
-            align-items: center; /* Center align items vertically */
-            margin-top: 3rem;
-            font-size: 0.75rem;
-            color: #666;
-            justify-content: center;
 
-            div {
-                text-align: center;
-                margin-bottom: 1rem;
+        .legend-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .legend {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            font-size: 1rem;
+            color: #666;
+
+            .close-button {
+                position: absolute;
+                top: 0.5rem;
+                right: 0.5rem;
+                border: none;
+                background: none;
+                font-size: 1.5rem;
+                cursor: pointer;
+                color: #999;
+                &:hover {
+                    color: #333;
+                }
             }
 
             .legend-header {
-                margin-right: 1.5rem; /* Add spacing between header and items */
-                margin-bottom: 1rem; /* Add spacing below the header */
+                font-weight: bold;
+                margin-bottom: 1.5rem;
+                color: #333;
             }
 
             .legend-item {
-                margin-right: 1.5rem; /* Add spacing between legend items */
-                margin-bottom: 0.5rem; /* Add spacing between legend items */
+                margin-bottom: 0.75rem;
                 display: flex;
                 align-items: center;
             }
@@ -311,29 +346,26 @@
                 display: inline-block;
                 height: 1.5rem;
                 vertical-align: middle;
-                margin-left: 0.5rem;
+                margin-right: 1rem;
 
                 &.your {
                     width: 4px;
-                    height: 1rem;
+                    height: 1.25rem;
                     background-color: var(--dora-blue);
                     border-radius: 2px;
-                    margin-right: 0.5rem;
                 }
 
                 &.industry {
                     background-color: var(--metric-background) !important;
                     width: 1px;
-                    height: 1rem;
-                    margin-right: 0.5rem;
+                    height: 1.25rem;
                 }
 
                 &.std {
                     background-color: var(--std-background);
                     width: 32px;
-                    height: 1rem;
+                    height: 1.25rem;
                     border-radius: 0.25rem;
-                    margin-right: 0.5rem;
                 }
             }
         }
@@ -364,13 +396,6 @@
                     border-bottom: 1px dotted var(--border-color-light);
                     padding-bottom: 1.25rem;
                     margin-bottom: 1.25rem;
-                }
-            }
-            .legend {
-                flex-direction: column;
-
-                .legend_header {
-                    display: block;
                 }
             }
         }

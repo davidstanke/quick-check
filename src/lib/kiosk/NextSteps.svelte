@@ -8,7 +8,7 @@
 </script>
 
 <section class="nextSteps">
-    <StartOver on:reset={reset} />
+    <StartOver on:reset={reset} showLegendLink={true} on:toggleLegend />
     <div>
         <ul>
             <li>
