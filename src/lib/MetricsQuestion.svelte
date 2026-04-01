@@ -5,8 +5,7 @@
   export let metrics;
   export let metric_name = "METRIC",
     metric_position = 1,
-    current_metric = 0,
-    displayMode = "embedded";
+    current_metric = 0;
   import metrics_question_responses from "./data/metrics_question_responses.json";
   import metrics_images from "./data/metrics_images.json";
   const metrics_details = {
@@ -40,21 +39,18 @@
   const nextMetric = () => dispatch("nextMetric");
 </script>
 
-<!-- TODO: images on this page are inlined from "metrics_image.json" ... we should be able to use Vite to inline them automatically from static image files, which will make the source cleaner -->
 <div
   in:fade={{ delay: 250, duration: 100 }}
   out:fade={{ delay: 150, duration: 100 }}
   class="question-container"
 >
-  <section class="question {displayMode}">
+  <section class="question">
     <aside>
       <h5>
         Question {metric_position + 1} of 4<span class="friendly_name"
           >: {metric_friendly_name}</span
         >
       </h5>
-      <h2>{metric_friendly_name}</h2>
-      <img alt={metric_friendly_name} src={metrics_images[metric_name]} />
     </aside>
     <fieldset>
       <legend>
@@ -62,48 +58,17 @@
       </legend>
       <div class="inputs">
         {#if metric_name === "changefailure"}
-          {#if displayMode === "embedded"}
-            <slider>
-              <input
-                type="range"
+          {#each { length: 11 } as _, value}
+            <label
+              ><input
                 name="changefailure"
-                min="0"
-                max="100"
+                type="radio"
+                bind:group={metrics["changefailure"]}
                 on:change={nextMetric}
-                bind:value={metrics["changefailure"]}
-              />
-              <echo>
-                {#if metrics["changefailure"] >= 0}{metrics[
-                    "changefailure"
-                  ]}{/if}
-              </echo>
-              <tickmarks>
-                <tick>|<br />0</tick>
-                <tick>|</tick>
-                <tick>|<br />20</tick>
-                <tick>|</tick>
-                <tick>|<br />40</tick>
-                <tick>|</tick>
-                <tick>|<br />60</tick>
-                <tick>|</tick>
-                <tick>|<br />80</tick>
-                <tick>|</tick>
-                <tick>|<br />100</tick>
-              </tickmarks>
-            </slider>
-          {:else}
-            {#each { length: 11 } as _, value}
-              <label
-                ><input
-                  name="changefailure"
-                  type="radio"
-                  bind:group={metrics["changefailure"]}
-                  on:change={nextMetric}
-                  value={value * 10}
-                />{value * 10}%</label
-              >
-            {/each}
-          {/if}
+                value={value * 10}
+              />{value * 10}%</label
+            >
+          {/each}
         {:else}
           {#each Object.entries(metrics_question_responses[metric_name]) as [value, text]}
             <label
@@ -131,39 +96,22 @@
     display: block;
   }
 
-  // background colors
-  .question-container:nth-child(1) {
-    .question aside {
-      background-color: var(--dora-highlight);
-    }
-  }
-  .question-container:nth-child(2) {
-    .question aside {
-      background-color: var(--dora-secondary-b);
-    }
-  }
-  .question-container:nth-child(3) {
-    .question aside {
-      background-color: var(--dora-secondary-a);
-    }
-  }
-  .question-container:nth-child(4) {
-    .question aside {
-      background-color: var(--dora-secondary-c);
-    }
-  }
-
   section.question {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     margin-bottom: 16px;
-    background-color: color-mix(in srgb, var(--dora-primary-light), transparent 50%);
+    border-bottom: none;
+    position: absolute;
+    top: 0;
+    left: 40vw;
+    background-color: transparent;
 
     aside {
       padding: 1rem;
       margin-right: 1rem;
-      width: 35%;
       max-width: 320px;
+      width: 35vw;
+      background-color: transparent !important;
 
       h5 {
         color: var(--dora-primary-dark);
@@ -171,133 +119,62 @@
     }
 
     .description {
-      padding-top: 1.5rem;
       font-size: calc(clamp(16px, 1.25vw, 20px));
-      line-height:1.4;
+      line-height: 1.4;
       font-weight: 400;
+      padding-top: 0;
+      font-size: 1.5rem;
     }
 
     fieldset {
-      width: 65%;
       padding: 12px;
+      width: calc(100% - 1rem);
     }
 
     span.friendly_name {
-      display: none;
-    }
-
-    img {
-      max-width: 100%;
+      display: inline;
     }
 
     legend {
-      margin-bottom: .5em;
+      margin-bottom: 0.5em;
     }
 
     label {
       margin-bottom: 6px;
       padding-inline: 0.5rem;
-    }
+      font-size: 1.65rem;
+      background-color: #eef;
+      border-radius: 0.5rem;
+      border: 1px solid #e9e9f0;
+      padding: 0.5rem 1rem;
+      user-select: none;
 
-    slider {
-      display: grid;
-      max-width: 600px;
-      grid-template-columns: auto 2rem;
-      input[type="range"] {
-        width: 100%;
+      &:active,
+      &:has(:checked) {
+        background-color: var(--dora-blue);
+        color: white;
       }
-      echo {
-        padding: 0 0.5rem;
-        height: 1.5rem;
-        vertical-align: middle;
-      }
-    }
-    tickmarks {
-      width: 100%;
-      max-width: 600px;
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      margin-left: 0rem;
-      margin-right: -3rem;
-      tick {
+
+      &:has(input[type="radio"][name="changefailure"]) {
         display: inline-block;
-        text-align: right;
-        font-size: 0.65rem;
-        color: #666;
+        font-size: 2rem;
+        border-radius: 50%;
+        width: 6rem;
+        height: 6rem;
         text-align: center;
-        width: 1rem;
+        line-height: 6rem;
+        padding: 0;
+        margin: 0.5rem;
       }
     }
 
-    &.kiosk {
-      flex-direction: column;
-      border-bottom: none;
-      position: absolute;
-      top: 0;
-      left: 40vw;
-      background-color: transparent;
+    // show radio options as buttons
+    input[type="radio"] {
+      display: none;
+    }
 
-      aside {
-        width: 35vw;
-        background-color: transparent !important;
-      }
-
-      p.description {
-        padding-top: 0;
-        font-size: 1.5rem;
-      }
-
-      fieldset {
-        width: calc(100% - 1rem);
-      }
-
-      h2 {
-        display: none;
-      }
-
-      img {
-        display: none;
-      }
-      span.friendly_name {
-        display: inline;
-      }
-
-      // show radio options as buttons
-      input[type="radio"] {
-        display: none;
-      }
-
-      label {
-        font-size: 1.65rem;
-        background-color: #eef;
-        border-radius: 0.5rem;
-        border: 1px solid #e9e9f0;
-        padding: 0.5rem 1rem;
-        user-select: none;
-
-        &:active,
-        &:has(:checked) {
-          background-color: var(--dora-blue);
-          color: white;
-        }
-
-        &:has(input[type="radio"][name="changefailure"]) {
-          display: inline-block;
-          font-size: 2rem;
-          border-radius: 50%;
-          width: 6rem;
-          height: 6rem;
-          text-align: center;
-          line-height: 6rem;
-          padding: 0;
-          margin: 0.5rem;
-        }
-      }
-
-      div.inputs:has(input[type="radio"][name="changefailure"]) {
-        text-align: center;
-      }
+    div.inputs:has(input[type="radio"][name="changefailure"]) {
+      text-align: center;
     }
   }
 
@@ -311,9 +188,6 @@
         width: 100%;
         padding: 0.5rem;
         background-color: transparent !important;
-        img {
-          display: none;
-        }
       }
       p.description {
         padding-top: 0;

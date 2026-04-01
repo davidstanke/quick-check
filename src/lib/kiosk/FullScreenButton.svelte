@@ -1,5 +1,11 @@
 <script>
+	import { onMount } from 'svelte';
     let fullscreen = false;
+	let fullscreenEnabled = false;
+
+	onMount(() => {
+		fullscreenEnabled = document.fullscreenEnabled;
+	});
 
     let fullscreen_modes = {
         false: "fullscreen_exit",
@@ -17,7 +23,7 @@
     }
 </script>
 
-{#if document.fullscreenEnabled}
+{#if fullscreenEnabled}
 <span
     class="google-material-icons"
     id="fullscreen_container"

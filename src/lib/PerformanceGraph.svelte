@@ -1,7 +1,6 @@
 <script>
     export let user_score,
         industry_score,
-        displayMode,
         std = 0,
         tickmarks = [];
     export let featured = false;
@@ -11,7 +10,7 @@
     $: user_score_position = `${user_score * 10}%`;
 </script>
 
-<div class="graph {displayMode}" class:featured>
+<div class="graph" class:featured>
     <div class="axis"></div>
     <div
         class="std"
@@ -21,16 +20,6 @@
     <div class="metric industry" style:left="{industry_score * 10}%"></div>
     <div class="metric user" style:left={user_score_position}></div>
     <div class="user_score" style:left={user_score_position}>{user_score}</div>
-    <div class="tickmarks">
-        {#each tickmarks as tick, index}
-            <div
-                class="tick"
-                style:left="{index * (100 / (tickmarks.length - 1))}%"
-            >
-                {tick}
-            </div>
-        {/each}
-    </div>
 </div>
 
 <style lang="scss">
@@ -50,73 +39,46 @@
         }
 
         .std {
-            height: 0.9rem;
-            position: absolute;
             background-color: var(--std-background);
+            height: 2rem;
+            position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            transition: all 0.3s ease-out;
-            border-radius: 0.2rem;
+            border-radius: 0.15rem;
         }
 
         .metric {
             position: absolute;
-            box-sizing: content-box;
-            height: 2.5rem;
+            height: 3rem;
+            width: 2px;
             top: 50%;
-            transform: translateX(-50%) translateY(-50%);
-            width: 0.2%;
-            min-width: 1px;
-            background-color: var(--metric-background);
-            border-left: 1px solid var(--metric-border);
-            border-right: 1px solid var(--metric-border);
-            transition: all 0.3s ease-out;
+            transform: translateY(-50%);
+
+            &.industry {
+                background-color: var(--metric-background);
+            }
 
             &.user {
                 background-color: var(--dora-blue);
-                height: 3rem;
-                width: 0.2rem;
-                border-bottom: 1px solid var(--metric-border);
-                border-radius: 0.2rem;
             }
         }
 
         .user_score {
-            font-size: 0.85rem;
-            color: var(--dora-blue);
             position: absolute;
             top: 50%;
             transform: translateX(-50%) translateY(calc(-50% - 2rem));
-            background-color: var(--user-score-bg);
-            border: 2px solid var(--dora-blue);
-            padding: 0 0.25rem;
-            border-radius: 0.35rem;
-            transition: all 0.3s ease-out;
-        }
-
-        .tickmarks {
-            display: flex;
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            .tick {
-                position: absolute;
-                bottom: 0;
-                text-wrap: nowrap;
-                font-size: 0.65rem;
-                color: #999;
-                transform: translateX(-50%);
-            }
+            background-color: var(--dora-blue);
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            color: white;
+            transition: left 250ms ease-out;
         }
 
         &.featured {
-            height: 6.5rem;
+            height: 7.5rem;
             .axis {
-                height: 2.5em;
-                border-radius: 1.25em;
-                background: var(--performance-spectrum);
-                left: -1.25em;
-                right: -1.25em;
+                height: 0.5rem;
             }
 
             .std {
@@ -141,12 +103,5 @@
                 color: white;
             }
         }
-
-        &.kiosk {
-            .tickmarks {
-                display:none;
-            }
-        }
-
     }
 </style>

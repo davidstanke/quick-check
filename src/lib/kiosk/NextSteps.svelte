@@ -1,7 +1,6 @@
 <script>
     import StartOver from "./StartOver.svelte";
     import { createEventDispatcher } from "svelte";
-    export let displayMode="kiosk";
 
     const dispatch = createEventDispatcher();
 
@@ -9,8 +8,7 @@
 </script>
 
 <section class="nextSteps">
-    <StartOver on:reset={reset} {displayMode} />
-    <h1>Next Steps</h1>
+    <StartOver on:reset={reset} />
     <div>
         <ul>
             <li>
@@ -48,23 +46,50 @@
         justify-content: center;
         gap: 2rem;
         padding: 0 2rem;
-    }
+        margin-top: 2rem;
+        background-color: #fafaff;
 
-    .qrcode {
-        text-align: center;
-        padding: 0.5rem 0;
-        width: 6rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        img {
-            display: block;
+        h1 {
+            color: #999;
+            text-transform: uppercase;
+            font-size: 1rem;
         }
-        a {
-            font-size: 0.75rem;
-            line-height: 0.75rem;
-            color: #666;
-            text-decoration: none;
+
+        ul {
+            font-size: 1.5rem;
+            line-height: 1.5;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+
+            li::before {
+                content: "»";
+                color: var(--dora-blue);
+                display: inline-block;
+                width: 1em;
+                margin-left: -1em;
+            }
+
+            a {
+                text-decoration: underline;
+                color: var(--dora-blue);
+            }
+        }
+
+        div.qrcode {
+            text-align: center;
+            font-size: 1.5rem;
+            color: var(--dora-blue);
+            a {
+                text-decoration: none;
+                color: inherit;
+            }
+
+            img {
+                width: 8rem;
+                height: 8rem;
+                display: block;
+            }
         }
     }
 </style>

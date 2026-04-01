@@ -3,8 +3,6 @@
     import { onMount } from "svelte";
     import { onDestroy } from "svelte";
 
-    export let displayMode = "kiosk";
-
     const TIMER_DURATION_IN_SEC = 90;
     const TIMER_HIDDEN_FOR_SEC = 60;
 
@@ -37,7 +35,7 @@
     })
 </script>
 
-<div class="container {displayMode}">
+<div class="container">
     <a href="." on:click|preventDefault={reset} class="reset">start over</a>
     <div class="auto-reset"> 
         {#if seconds_remaining <= TIMER_DURATION_IN_SEC - TIMER_HIDDEN_FOR_SEC}
@@ -59,14 +57,11 @@
         margin: 0 3rem;
         color: #999;
         text-decoration: none;
+        font-size: 1.5rem;
     }
 
     div.auto-reset {
         font-size: 1rem;
         color: #999;
-    }
-
-    div.container.kiosk a.reset {
-        font-size: 1.5rem;
     }
 </style>

@@ -8,7 +8,7 @@
     import organization_size_metrics from "./data/organization_size_metrics.json";
     import industry_metrics_data from "./data/industry_metrics.json";
 
-    export let metrics, industry, displayMode;
+    export let metrics, industry;
 
     let metrics_recoded = {
         leadtime: -1,
@@ -120,7 +120,7 @@
         {/each}
     </select>
 </div>
-<div class="YourPerformance {displayMode}">
+<div class="YourPerformance">
     <section class="performance-graphs">
         <aside>
             <b>Your performance</b>
@@ -138,7 +138,6 @@
                 std={selected_industry_metrics.performance_average.std}
                 tickmarks={[0, 2, 4, 6, 8, 10]}
                 featured
-                {displayMode}
             />
         </div>
         <aside>
@@ -153,7 +152,6 @@
                 industry_score={selected_industry_metrics.leadtime.mean}
                 std={selected_industry_metrics.leadtime.std}
                 tickmarks={[">6mo", "1-6mo", "1w-1mo", "1d-1w", "<1d", "<1h"]}
-                {displayMode}
             />
         </div>
         <aside>
@@ -177,7 +175,6 @@
                     "1h-1d",
                     "on demand",
                 ]}
-                {displayMode}
             />
         </div>
         <aside>
@@ -205,7 +202,6 @@
                     "10%",
                     "0%",
                 ]}
-                {displayMode}
             />
         </div>
         <aside>
@@ -222,7 +218,6 @@
                 industry_score={selected_industry_metrics.failurerecovery.mean}
                 std={selected_industry_metrics.failurerecovery.std}
                 tickmarks={[">6mo", "1-6mo", "1w-1mo", "1d-1w", "<1d", "<1h"]}
-                {displayMode}
             />
         </div>
     </section>
@@ -251,15 +246,16 @@
 
     .YourPerformance {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
 
         .performance-graphs {
             display: grid;
             align-items: center;
             grid-template-columns: fit-content(20rem) auto;
-            gap: 2rem 2rem;
             margin-top: 2rem;
             padding: 0 1.25em;
+            gap: 0.25rem 2rem;
+            flex-grow: 1;
 
             aside {
                 text-align: center;
@@ -294,60 +290,50 @@
             color: #666;
             justify-content: center;
 
-                .legend-header {
-                    margin-right: 1.5rem; /* Add spacing between header and items */
-                    margin-bottom: 1rem; /* Add spacing below the header */
+            div {
+                text-align: center;
+                margin-bottom: 1rem;
+            }
+
+            .legend-header {
+                margin-right: 1.5rem; /* Add spacing between header and items */
+                margin-bottom: 1rem; /* Add spacing below the header */
+            }
+
+            .legend-item {
+                margin-right: 1.5rem; /* Add spacing between legend items */
+                margin-bottom: 0.5rem; /* Add spacing between legend items */
+                display: flex;
+                align-items: center;
+            }
+
+            span {
+                display: inline-block;
+                height: 1.5rem;
+                vertical-align: middle;
+                margin-left: 0.5rem;
+
+                &.your {
+                    width: 4px;
+                    height: 1rem;
+                    background-color: var(--dora-blue);
+                    border-radius: 2px;
+                    margin-right: 0.5rem;
                 }
 
-                .legend-item {
-                    margin-right: 1.5rem; /* Add spacing between legend items */
-                    margin-bottom: 0.5rem; /* Add spacing between legend items */
-                    display: flex;
-                    align-items: center;
+                &.industry {
+                    background-color: var(--metric-background) !important;
+                    width: 1px;
+                    height: 1rem;
+                    margin-right: 0.5rem;
                 }
 
-                span {
-                    display: inline-block;
-                    height: 1.5rem;
-                    vertical-align: middle;
-                    margin-left: 0.5rem;
-
-                    &.your {
-                        width: 4px;
-                        height: 1rem;
-                        background-color: var(--dora-blue);
-                        border-radius: 2px;
-                        margin-right: 0.5rem;
-                    }
-
-                    &.industry {
-                        background-color: var(--metric-background) !important;
-                        width: 1px;
-                        height: 1rem;
-                        margin-right: 0.5rem;
-                    }
-
-                    &.std {
-                        background-color: var(--std-background);
-                        width: 32px;
-                        height: 1rem;
-                        border-radius: 0.25rem;
-                        margin-right: 0.5rem;
-                    }
-            }
-        }
-
-        &.kiosk {
-            flex-direction: row;
-            .performance-graphs {
-                gap: 0.25rem 2rem;
-                flex-grow: 1;
-            }
-            .legend {
-                flex-direction: column;
-                div {
-                    text-align: center;
-                    margin-bottom: 1rem;
+                &.std {
+                    background-color: var(--std-background);
+                    width: 32px;
+                    height: 1rem;
+                    border-radius: 0.25rem;
+                    margin-right: 0.5rem;
                 }
             }
         }
