@@ -9,6 +9,7 @@
     import industry_metrics_data from "./data/industry_metrics.json";
 
     export let metrics, industry;
+    export let showLegend = false;
 
     let metrics_recoded = {
         leadtime: -1,
@@ -221,22 +222,27 @@
             />
         </div>
     </section>
-    <section class="legend">
-        <div class="legend-header">
-            <span>
-            {baselineText}
-            </span>
-        </div>
-        <div class="legend-item">
-            <span class="industry">&nbsp;</span> Average
-        </div>
-        <div class="legend-item">
-            <span class="std">&nbsp;</span> Standard deviation
-        </div>
-        <div class="legend-item">
-            <span class="your">&nbsp;</span> Your performance
-        </div>
-    </section>
+    {#if showLegend}
+    <div class="legend-overlay" on:click={() => showLegend = false} tabindex="0" role="button" on:keydown={(e) => { if (e.key === 'Escape' || e.key === 'Enter') showLegend = false; }}>
+        <section class="legend floating" on:click|stopPropagation on:keydown|stopPropagation role="dialog" aria-modal="true" tabindex="-1">
+            <button class="close-btn" aria-label="Close" on:click={() => showLegend = false}>&times;</button>
+            <div class="legend-header">
+                <span>
+                {baselineText}
+                </span>
+            </div>
+            <div class="legend-item">
+                <span class="industry">&nbsp;</span> Average
+            </div>
+            <div class="legend-item">
+                <span class="std">&nbsp;</span> Standard deviation
+            </div>
+            <div class="legend-item">
+                <span class="your">&nbsp;</span> Your performance
+            </div>
+        </section>
+    </div>
+    {/if}
 </div>
 
 <style lang="scss">
@@ -280,15 +286,50 @@
                 }
             }
         }
+        .legend-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
         .legend {
             display: flex;
             flex-direction: column; /* Stack items vertically */
             align-items: flex-start; /* Align items to the start of the container */
             align-items: center; /* Center align items vertically */
-            margin-top: 3rem;
             font-size: 0.75rem;
             color: #666;
             justify-content: center;
+
+            &.floating {
+                background: white;
+                padding: 2.5rem;
+                border-radius: 0.5rem;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                position: relative;
+                min-width: 300px;
+                max-width: 90vw;
+            }
+
+            .close-btn {
+                position: absolute;
+                top: 0.5rem;
+                right: 1rem;
+                background: none;
+                border: none;
+                font-size: 2rem;
+                cursor: pointer;
+                color: #999;
+                padding: 0;
+                line-height: 1;
+            }
 
             div {
                 text-align: center;
