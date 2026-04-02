@@ -36,7 +36,10 @@
 </script>
 
 <div class="container">
-    <a href="." on:click|preventDefault={reset} class="reset">start over</a>
+    <div class="links">
+        <a href="." on:click|preventDefault={reset} class="reset">start over</a>
+        <a href="." on:click|preventDefault={() => dispatch("showLegend")} class="reset">legend</a>
+    </div>
     <div class="auto-reset"> 
         {#if seconds_remaining <= TIMER_DURATION_IN_SEC - TIMER_HIDDEN_FOR_SEC}
             starting over in {seconds_remaining}s
@@ -49,12 +52,18 @@
         text-align: center;
     }
 
+    div.links {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
     a.reset {
         display: inline-block;
         border: 1px solid #ccc;
         border-radius: 0.5rem;
         padding: 0.25rem 0.5rem;
-        margin: 0 3rem;
         color: #999;
         text-decoration: none;
         font-size: 1.5rem;

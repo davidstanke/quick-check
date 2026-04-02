@@ -9,6 +9,7 @@
     import industry_metrics_data from "./data/industry_metrics.json";
 
     export let metrics, industry;
+    export let showLegend = false;
 
     let metrics_recoded = {
         leadtime: -1,
@@ -221,22 +222,31 @@
             />
         </div>
     </section>
-    <section class="legend">
-        <div class="legend-header">
-            <span>
-            {baselineText}
-            </span>
+    {#if showLegend}
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <!-- svelte-ignore a11y-no-static-element-interactions -->
+        <div class="legend-modal-backdrop" on:click={() => showLegend = false}>
+            <div class="legend-modal" on:click|stopPropagation>
+                <button class="close-btn" on:click={() => showLegend = false}>&times;</button>
+                <section class="legend">
+                    <div class="legend-header">
+                        <span>
+                        {baselineText}
+                        </span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="industry">&nbsp;</span> Average
+                    </div>
+                    <div class="legend-item">
+                        <span class="std">&nbsp;</span> Standard deviation
+                    </div>
+                    <div class="legend-item">
+                        <span class="your">&nbsp;</span> Your performance
+                    </div>
+                </section>
+            </div>
         </div>
-        <div class="legend-item">
-            <span class="industry">&nbsp;</span> Average
-        </div>
-        <div class="legend-item">
-            <span class="std">&nbsp;</span> Standard deviation
-        </div>
-        <div class="legend-item">
-            <span class="your">&nbsp;</span> Your performance
-        </div>
-    </section>
+    {/if}
 </div>
 
 <style lang="scss">
@@ -280,60 +290,91 @@
                 }
             }
         }
-        .legend {
+        .legend-modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.4);
             display: flex;
-            flex-direction: column; /* Stack items vertically */
-            align-items: flex-start; /* Align items to the start of the container */
-            align-items: center; /* Center align items vertically */
-            margin-top: 3rem;
-            font-size: 0.75rem;
-            color: #666;
+            align-items: center;
             justify-content: center;
+            z-index: 1000;
+        }
 
-            div {
-                text-align: center;
-                margin-bottom: 1rem;
+        .legend-modal {
+            position: relative;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            border-radius: 1rem;
+            padding: 3rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            max-width: 90%;
+            width: 30rem;
+            color: #333;
+            
+            .close-btn {
+                position: absolute;
+                top: 1rem;
+                right: 1.5rem;
+                background: none;
+                border: none;
+                font-size: 2rem;
+                cursor: pointer;
+                color: #333;
             }
 
-            .legend-header {
-                margin-right: 1.5rem; /* Add spacing between header and items */
-                margin-bottom: 1rem; /* Add spacing below the header */
-            }
-
-            .legend-item {
-                margin-right: 1.5rem; /* Add spacing between legend items */
-                margin-bottom: 0.5rem; /* Add spacing between legend items */
+            .legend {
                 display: flex;
+                flex-direction: column;
                 align-items: center;
-            }
+                font-size: 1rem;
+                font-weight: 500;
 
-            span {
-                display: inline-block;
-                height: 1.5rem;
-                vertical-align: middle;
-                margin-left: 0.5rem;
-
-                &.your {
-                    width: 4px;
-                    height: 1rem;
-                    background-color: var(--dora-blue);
-                    border-radius: 2px;
-                    margin-right: 0.5rem;
+                div {
+                    text-align: center;
+                    margin-bottom: 1rem;
                 }
 
-                &.industry {
-                    background-color: var(--metric-background) !important;
-                    width: 1px;
-                    height: 1rem;
-                    margin-right: 0.5rem;
+                .legend-header {
+                    margin-bottom: 1.5rem;
+                    font-size: 1.25rem;
                 }
 
-                &.std {
-                    background-color: var(--std-background);
-                    width: 32px;
-                    height: 1rem;
-                    border-radius: 0.25rem;
-                    margin-right: 0.5rem;
+                .legend-item {
+                    margin-bottom: 1rem;
+                    display: flex;
+                    align-items: center;
+                }
+
+                span {
+                    display: inline-block;
+                    height: 1.5rem;
+                    vertical-align: middle;
+                    margin-left: 0.5rem;
+
+                    &.your {
+                        width: 4px;
+                        height: 1rem;
+                        background-color: var(--dora-blue);
+                        border-radius: 2px;
+                        margin-right: 0.5rem;
+                    }
+
+                    &.industry {
+                        background-color: #666 !important;
+                        width: 1px;
+                        height: 1rem;
+                        margin-right: 0.5rem;
+                    }
+
+                    &.std {
+                        background-color: rgba(0,0,0,0.15);
+                        width: 32px;
+                        height: 1rem;
+                        border-radius: 0.25rem;
+                        margin-right: 0.5rem;
+                    }
                 }
             }
         }
@@ -364,13 +405,6 @@
                     border-bottom: 1px dotted var(--border-color-light);
                     padding-bottom: 1.25rem;
                     margin-bottom: 1.25rem;
-                }
-            }
-            .legend {
-                flex-direction: column;
-
-                .legend_header {
-                    display: block;
                 }
             }
         }
