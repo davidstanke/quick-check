@@ -2,13 +2,17 @@
     import StartOver from "./StartOver.svelte";
     import { createEventDispatcher } from "svelte";
 
+    export let showLegend = false;
+
     const dispatch = createEventDispatcher();
 
     const reset = () => dispatch("reset");
 </script>
 
 <section class="nextSteps">
-    <StartOver on:reset={reset} />
+    <StartOver on:reset={reset}>
+        <a href="#" on:click|preventDefault={() => showLegend = true} class="legend-link">legend</a>
+    </StartOver>
     <div>
         <ul>
             <li>
@@ -44,6 +48,16 @@
         padding: 0 2rem;
         margin-top: 2rem;
         background-color: #fafaff;
+
+        a.legend-link {
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 0.5rem;
+            padding: 0.25rem 0.5rem;
+            color: #999;
+            text-decoration: none;
+            font-size: 1.5rem;
+        }
 
         h1 {
             color: #999;

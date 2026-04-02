@@ -9,6 +9,7 @@
     import industry_metrics_data from "./data/industry_metrics.json";
 
     export let metrics, industry;
+    export let showLegend = false;
 
     let metrics_recoded = {
         leadtime: -1,
@@ -221,23 +222,38 @@
             />
         </div>
     </section>
-    <section class="legend">
-        <div class="legend-header">
-            <span>
-            {baselineText}
-            </span>
-        </div>
-        <div class="legend-item">
-            <span class="industry">&nbsp;</span> Average
-        </div>
-        <div class="legend-item">
-            <span class="std">&nbsp;</span> Standard deviation
-        </div>
-        <div class="legend-item">
-            <span class="your">&nbsp;</span> Your performance
-        </div>
-    </section>
 </div>
+
+{#if showLegend}
+<div class="modal-container">
+    <div class="modal">
+        <div class="modal-header">
+            <h2>Legend</h2>
+            <button class="modal-close-x" on:click={() => showLegend = false}>
+                <svg width="24" height="24" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+            </button>
+        </div>
+        <div class="capability-content">
+            <section class="legend">
+                <div class="legend-header">
+                    <span>
+                    {baselineText}
+                    </span>
+                </div>
+                <div class="legend-item">
+                    <span class="industry">&nbsp;</span> Average
+                </div>
+                <div class="legend-item">
+                    <span class="std">&nbsp;</span> Standard deviation
+                </div>
+                <div class="legend-item">
+                    <span class="your">&nbsp;</span> Your performance
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+{/if}
 
 <style lang="scss">
     .heading {
@@ -247,6 +263,7 @@
     .YourPerformance {
         display: flex;
         flex-direction: row;
+        justify-content: center;
 
         .performance-graphs {
             display: grid;
@@ -256,6 +273,7 @@
             padding: 0 1.25em;
             gap: 0.25rem 2rem;
             flex-grow: 1;
+            max-width: 60rem;
 
             aside {
                 text-align: center;
@@ -280,61 +298,60 @@
                 }
             }
         }
-        .legend {
+    }
+
+    .legend {
+        display: flex;
+        flex-direction: column; /* Stack items vertically */
+        align-items: center; /* Center align items vertically */
+        font-size: 0.85rem;
+        color: #666;
+        justify-content: center;
+
+        div {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .legend-header {
+            margin-right: 1.5rem; /* Add spacing between header and items */
+            margin-bottom: 1rem; /* Add spacing below the header */
+        }
+
+        .legend-item {
+            margin-right: 1.5rem; /* Add spacing between legend items */
+            margin-bottom: 0.5rem; /* Add spacing between legend items */
             display: flex;
-            flex-direction: column; /* Stack items vertically */
-            align-items: flex-start; /* Align items to the start of the container */
-            align-items: center; /* Center align items vertically */
-            margin-top: 3rem;
-            font-size: 0.75rem;
-            color: #666;
-            justify-content: center;
+            align-items: center;
+        }
 
-            div {
-                text-align: center;
-                margin-bottom: 1rem;
+        span {
+            display: inline-block;
+            height: 1.5rem;
+            vertical-align: middle;
+            margin-left: 0.5rem;
+
+            &.your {
+                width: 4px;
+                height: 1rem;
+                background-color: var(--dora-blue);
+                border-radius: 2px;
+                margin-right: 0.5rem;
             }
 
-            .legend-header {
-                margin-right: 1.5rem; /* Add spacing between header and items */
-                margin-bottom: 1rem; /* Add spacing below the header */
+            &.industry {
+                background-color: var(--metric-background) !important;
+                width: 1px;
+                height: 1rem;
+                margin-right: 0.5rem;
             }
 
-            .legend-item {
-                margin-right: 1.5rem; /* Add spacing between legend items */
-                margin-bottom: 0.5rem; /* Add spacing between legend items */
-                display: flex;
-                align-items: center;
-            }
-
-            span {
-                display: inline-block;
-                height: 1.5rem;
-                vertical-align: middle;
-                margin-left: 0.5rem;
-
-                &.your {
-                    width: 4px;
-                    height: 1rem;
-                    background-color: var(--dora-blue);
-                    border-radius: 2px;
-                    margin-right: 0.5rem;
-                }
-
-                &.industry {
-                    background-color: var(--metric-background) !important;
-                    width: 1px;
-                    height: 1rem;
-                    margin-right: 0.5rem;
-                }
-
-                &.std {
-                    background-color: var(--std-background);
-                    width: 32px;
-                    height: 1rem;
-                    border-radius: 0.25rem;
-                    margin-right: 0.5rem;
-                }
+            &.std {
+                background-color: var(--std-background);
+                width: 32px;
+                height: 1rem;
+                border-radius: 0.25rem;
+                margin-right: 0.5rem;
             }
         }
     }
@@ -366,12 +383,12 @@
                     margin-bottom: 1.25rem;
                 }
             }
-            .legend {
-                flex-direction: column;
+        }
+        .legend {
+            flex-direction: column;
 
-                .legend_header {
-                    display: block;
-                }
+            .legend-header {
+                display: block;
             }
         }
     }

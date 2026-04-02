@@ -37,6 +37,7 @@
 
 <div class="container">
     <a href="." on:click|preventDefault={reset} class="reset">start over</a>
+    <slot></slot>
     <div class="auto-reset"> 
         {#if seconds_remaining <= TIMER_DURATION_IN_SEC - TIMER_HIDDEN_FOR_SEC}
             starting over in {seconds_remaining}s
