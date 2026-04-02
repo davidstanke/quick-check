@@ -225,7 +225,7 @@
 </div>
 
 {#if showLegend}
-<div class="modal-container">
+<div class="modal-container" role="dialog" aria-modal="true">
     <div class="modal">
         <div class="modal-header">
             <h2>Legend</h2>
