@@ -95,7 +95,9 @@
         .legend {
             flex-direction: column;
 
-            .legend_header {
+            .legend-header {
+                display: block;
+            }
                 display: block;
             }
         }
