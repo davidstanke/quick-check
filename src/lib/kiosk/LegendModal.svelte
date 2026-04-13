@@ -11,7 +11,7 @@
     <div class="modal" on:click|stopPropagation>
         <div class="modal-header">
             <h2>Legend</h2>
-            <button class="modal-close-x" on:click={close}>X</button>
+            <button class="modal-close-x" on:click={close} aria-label="Close modal">X</button>
         </div>
         <div class="capability-content">
             <section class="legend">
