@@ -5,10 +5,11 @@
     const dispatch = createEventDispatcher();
 
     const reset = () => dispatch("reset");
+    const showLegend = () => dispatch("showLegend");
 </script>
 
 <section class="nextSteps">
-    <StartOver on:reset={reset} />
+    <StartOver on:reset={reset} on:showLegend={showLegend} hasLegendLink={true} />
     <div>
         <ul>
             <li>

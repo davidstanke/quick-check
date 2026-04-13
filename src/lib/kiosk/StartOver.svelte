@@ -3,6 +3,8 @@
     import { onMount } from "svelte";
     import { onDestroy } from "svelte";
 
+    export let hasLegendLink = false;
+
     const TIMER_DURATION_IN_SEC = 90;
     const TIMER_HIDDEN_FOR_SEC = 60;
 
@@ -37,6 +39,9 @@
 
 <div class="container">
     <a href="." on:click|preventDefault={reset} class="reset">start over</a>
+    {#if hasLegendLink}
+        <a href="." on:click|preventDefault={() => dispatch('showLegend')} class="reset">legend</a>
+    {/if}
     <div class="auto-reset"> 
         {#if seconds_remaining <= TIMER_DURATION_IN_SEC - TIMER_HIDDEN_FOR_SEC}
             starting over in {seconds_remaining}s

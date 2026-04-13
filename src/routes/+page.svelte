@@ -8,6 +8,7 @@
     import FullScreenButton from "$lib/kiosk/FullScreenButton.svelte";
     import NextSteps from "$lib/kiosk/NextSteps.svelte";
     import StartOver from "$lib/kiosk/StartOver.svelte";
+    import LegendModal from "$lib/kiosk/LegendModal.svelte";
 
     let metrics = {
         leadtime: -1,
@@ -20,6 +21,8 @@
     let industry = "all";
     let metric_names = Object.keys(metrics);
     let current_metric = 0; // metrics questions are presented one at a time
+    let showLegend = false;
+    let baselineText = "";
 
     onMount(() => {
         const searchParams = new URLSearchParams(window.location.search);
@@ -92,8 +95,11 @@
         </div>
     {:else if step === "results"}
         <div class="yourPerformance">
-            <YourPerformance {metrics} bind:industry />
-            <NextSteps on:reset={reset} />
+            <YourPerformance {metrics} bind:industry bind:baselineText />
+            <NextSteps on:reset={reset} on:showLegend={() => showLegend = true} />
+            {#if showLegend}
+                <LegendModal {baselineText} on:close={() => showLegend = false} />
+            {/if}
         </div>
     {/if}
 </div>
