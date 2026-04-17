@@ -30,7 +30,7 @@ jobs:
               with:
                   workload_identity_provider: "projects/55325855002/locations/global/workloadIdenti\
                       tyPools/github-actions/providers/github-provider"
-                  # service_account: 'my-service-account@my-project.iam.gserviceaccount.com'
+                  service_account: 'quick-check@dev-sandbox-davidstanke.iam.gserviceaccount.com'
 
             - id: "deploy"
               uses: "google-github-actions/deploy-cloudrun@v3"
