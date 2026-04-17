@@ -28,8 +28,8 @@ jobs:
 
             - uses: "google-github-actions/auth@v3"
               with:
-                  workload_identity_provider: "projects/123456789/locations/global/workloadIdenti\
-                      tyPools/my-pool/providers/my-provider"
+                  workload_identity_provider: "projects/55325855002/locations/global/workloadIdenti\
+                      tyPools/github-actions/providers/github-provider"
                   # service_account: 'my-service-account@my-project.iam.gserviceaccount.com'
 
             - id: "deploy"
