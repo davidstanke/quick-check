@@ -18,6 +18,7 @@
 
     let step = "input";
     let industry = "all";
+    let showLegend = false;
     let metric_names = Object.keys(metrics);
     let current_metric = 0; // metrics questions are presented one at a time
 
@@ -92,8 +93,8 @@
         </div>
     {:else if step === "results"}
         <div class="yourPerformance">
-            <YourPerformance {metrics} bind:industry />
-            <NextSteps on:reset={reset} />
+            <YourPerformance {metrics} bind:industry bind:showLegend />
+            <NextSteps on:reset={reset} on:openLegend={() => showLegend = true} />
         </div>
     {/if}
 </div>

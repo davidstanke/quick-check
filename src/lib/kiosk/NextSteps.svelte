@@ -5,10 +5,14 @@
     const dispatch = createEventDispatcher();
 
     const reset = () => dispatch("reset");
+    const openLegend = () => dispatch("openLegend");
 </script>
 
 <section class="nextSteps">
-    <StartOver on:reset={reset} />
+    <div class="actions-container">
+        <StartOver on:reset={reset} />
+        <a href="." on:click|preventDefault={openLegend} class="legend-link">legend</a>
+    </div>
     <div>
         <ul>
             <li>
@@ -44,6 +48,26 @@
         padding: 0 2rem;
         margin-top: 2rem;
         background-color: #fafaff;
+
+        .actions-container {
+            display: flex;
+            align-items: center;
+            
+            .legend-link {
+                display: inline-block;
+                border: 1px solid #ccc;
+                border-radius: 0.5rem;
+                padding: 0.25rem 0.5rem;
+                color: #999;
+                text-decoration: none;
+                font-size: 1.5rem;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: #f0f0f0;
+                }
+            }
+        }
 
         h1 {
             color: #999;

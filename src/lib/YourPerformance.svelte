@@ -8,7 +8,7 @@
     import organization_size_metrics from "./data/organization_size_metrics.json";
     import industry_metrics_data from "./data/industry_metrics.json";
 
-    export let metrics, industry;
+    export let metrics, industry, showLegend = false;
 
     let metrics_recoded = {
         leadtime: -1,
@@ -221,22 +221,27 @@
             />
         </div>
     </section>
-    <section class="legend">
-        <div class="legend-header">
-            <span>
-            {baselineText}
-            </span>
+    {#if showLegend}
+        <div class="legend-modal-backdrop" on:click={() => showLegend = false}>
+            <section class="legend" on:click|stopPropagation>
+                <div class="legend-header">
+                    <span>
+                    {baselineText}
+                    </span>
+                </div>
+                <div class="legend-item">
+                    <span class="industry">&nbsp;</span> Average
+                </div>
+                <div class="legend-item">
+                    <span class="std">&nbsp;</span> Standard deviation
+                </div>
+                <div class="legend-item">
+                    <span class="your">&nbsp;</span> Your performance
+                </div>
+                <button class="close-btn" on:click={() => showLegend = false}>Close</button>
+            </section>
         </div>
-        <div class="legend-item">
-            <span class="industry">&nbsp;</span> Average
-        </div>
-        <div class="legend-item">
-            <span class="std">&nbsp;</span> Standard deviation
-        </div>
-        <div class="legend-item">
-            <span class="your">&nbsp;</span> Your performance
-        </div>
-    </section>
+    {/if}
 </div>
 
 <style lang="scss">
@@ -280,68 +285,91 @@
                 }
             }
         }
-        .legend {
+    }
+
+    .legend-modal-backdrop {
+        position: fixed;
+        inset: 0;
+        background-color: #eeeeff;
+        z-index: 1000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .legend {
+        background-color: white;
+        padding: 2rem;
+        border-radius: 1rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        font-size: 1rem;
+        color: #666;
+
+        .legend-header {
+            margin-bottom: 1.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .legend-item {
+            margin-bottom: 1rem;
             display: flex;
-            flex-direction: column; /* Stack items vertically */
-            align-items: flex-start; /* Align items to the start of the container */
-            align-items: center; /* Center align items vertically */
-            margin-top: 3rem;
-            font-size: 0.75rem;
+            align-items: center;
+        }
+
+        span {
+            display: inline-block;
+            height: 1.5rem;
+            vertical-align: middle;
+            margin-left: 0.5rem;
+
+            &.your {
+                width: 4px;
+                height: 1rem;
+                background-color: var(--dora-blue);
+                border-radius: 2px;
+                margin-right: 1rem;
+            }
+
+            &.industry {
+                background-color: var(--metric-background) !important;
+                width: 1px;
+                height: 1rem;
+                margin-right: 1rem;
+            }
+
+            &.std {
+                background-color: var(--std-background);
+                width: 32px;
+                height: 1rem;
+                border-radius: 0.25rem;
+                margin-right: 1rem;
+            }
+        }
+
+        .close-btn {
+            margin-top: 2rem;
+            align-self: center;
+            padding: 0.5rem 2rem;
+            font-size: 1.25rem;
+            border: 1px solid #ccc;
+            border-radius: 0.5rem;
+            background: white;
             color: #666;
-            justify-content: center;
+            cursor: pointer;
 
-            div {
-                text-align: center;
-                margin-bottom: 1rem;
-            }
-
-            .legend-header {
-                margin-right: 1.5rem; /* Add spacing between header and items */
-                margin-bottom: 1rem; /* Add spacing below the header */
-            }
-
-            .legend-item {
-                margin-right: 1.5rem; /* Add spacing between legend items */
-                margin-bottom: 0.5rem; /* Add spacing between legend items */
-                display: flex;
-                align-items: center;
-            }
-
-            span {
-                display: inline-block;
-                height: 1.5rem;
-                vertical-align: middle;
-                margin-left: 0.5rem;
-
-                &.your {
-                    width: 4px;
-                    height: 1rem;
-                    background-color: var(--dora-blue);
-                    border-radius: 2px;
-                    margin-right: 0.5rem;
-                }
-
-                &.industry {
-                    background-color: var(--metric-background) !important;
-                    width: 1px;
-                    height: 1rem;
-                    margin-right: 0.5rem;
-                }
-
-                &.std {
-                    background-color: var(--std-background);
-                    width: 32px;
-                    height: 1rem;
-                    border-radius: 0.25rem;
-                    margin-right: 0.5rem;
-                }
+            &:hover {
+                background-color: #f0f0f0;
             }
         }
     }
 
     /* There's no elegant way to use global variables for media queries (css variables aren't supported for this purpose,
     and SCSS vars are hard to propagate between different svelte components).
-    So we'll use a "magic number" of 800px, in each file */
+    So we'll use a \"magic number\" of 800px, in each file */
     @media (max-width: 800px) {
         .YourPerformance {
             .performance-graphs {
@@ -364,13 +392,6 @@
                     border-bottom: 1px dotted var(--border-color-light);
                     padding-bottom: 1.25rem;
                     margin-bottom: 1.25rem;
-                }
-            }
-            .legend {
-                flex-direction: column;
-
-                .legend_header {
-                    display: block;
                 }
             }
         }
