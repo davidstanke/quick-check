@@ -9,7 +9,6 @@ tools:
   - replace
   - list_directory
   - glob
-  - grep_search
 max_turns: 10
 timeout_mins: 3
 ---
