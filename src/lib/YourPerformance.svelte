@@ -108,6 +108,7 @@
     $: selected_industry_metrics = industry_metrics[currentIndustry];
     $: setIndustryInURL(currentIndustry);
     $: comparisonText = comparisonType === "industry" ? "Compare to industry benchmark:" : "Compare to organization size benchmark:";
+    export let baselineText = "";
     $: baselineText = comparisonType === "industry" ? `2024 Industry baseline (${industry_metrics[industry]["name"]}):` : `2024 Organization size benchmark (${industry_metrics[currentIndustry]["name"]}):`;
 </script>
 
@@ -221,22 +222,6 @@
             />
         </div>
     </section>
-    <section class="legend">
-        <div class="legend-header">
-            <span>
-            {baselineText}
-            </span>
-        </div>
-        <div class="legend-item">
-            <span class="industry">&nbsp;</span> Average
-        </div>
-        <div class="legend-item">
-            <span class="std">&nbsp;</span> Standard deviation
-        </div>
-        <div class="legend-item">
-            <span class="your">&nbsp;</span> Your performance
-        </div>
-    </section>
 </div>
 
 <style lang="scss">
@@ -280,63 +265,6 @@
                 }
             }
         }
-        .legend {
-            display: flex;
-            flex-direction: column; /* Stack items vertically */
-            align-items: flex-start; /* Align items to the start of the container */
-            align-items: center; /* Center align items vertically */
-            margin-top: 3rem;
-            font-size: 0.75rem;
-            color: #666;
-            justify-content: center;
-
-            div {
-                text-align: center;
-                margin-bottom: 1rem;
-            }
-
-            .legend-header {
-                margin-right: 1.5rem; /* Add spacing between header and items */
-                margin-bottom: 1rem; /* Add spacing below the header */
-            }
-
-            .legend-item {
-                margin-right: 1.5rem; /* Add spacing between legend items */
-                margin-bottom: 0.5rem; /* Add spacing between legend items */
-                display: flex;
-                align-items: center;
-            }
-
-            span {
-                display: inline-block;
-                height: 1.5rem;
-                vertical-align: middle;
-                margin-left: 0.5rem;
-
-                &.your {
-                    width: 4px;
-                    height: 1rem;
-                    background-color: var(--dora-blue);
-                    border-radius: 2px;
-                    margin-right: 0.5rem;
-                }
-
-                &.industry {
-                    background-color: var(--metric-background) !important;
-                    width: 1px;
-                    height: 1rem;
-                    margin-right: 0.5rem;
-                }
-
-                &.std {
-                    background-color: var(--std-background);
-                    width: 32px;
-                    height: 1rem;
-                    border-radius: 0.25rem;
-                    margin-right: 0.5rem;
-                }
-            }
-        }
     }
 
     /* There's no elegant way to use global variables for media queries (css variables aren't supported for this purpose,
@@ -364,13 +292,6 @@
                     border-bottom: 1px dotted var(--border-color-light);
                     padding-bottom: 1.25rem;
                     margin-bottom: 1.25rem;
-                }
-            }
-            .legend {
-                flex-direction: column;
-
-                .legend_header {
-                    display: block;
                 }
             }
         }
