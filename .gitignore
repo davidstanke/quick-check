@@ -26,3 +26,4 @@ build/
 gha-creds-*.json
 
 .playwright-mcp/
+.gemini/
