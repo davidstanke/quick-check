@@ -23,5 +23,6 @@ These features are temporary and should be removed or refactored by the date spe
 
 Some organizations are more interested in comparing their software delivery performance to other organizations of the same size. The Quick Check now allows for comparing a team's performance with organizations from the same industry or of the same size. Industry size comparisons are "hidden" behind a feature flag. Enable these comparisons by adding `comp=size` to the query string of the Quick Check. Data is stored in `src/lib/data/organization_size_metrics.json`.
 
+
 * Introduced: 2025-03-25
 * Remove or refactor by: 2025-10-01
