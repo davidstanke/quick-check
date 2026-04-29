@@ -12,9 +12,15 @@
 
     let countDownTimer;
 
+    export let showLegendLink = false;
+
     const reset = () => {
         seconds_remaining = TIMER_DURATION_IN_SEC;
         dispatch("reset");
+    };
+
+    const toggleLegend = () => {
+        dispatch("toggleLegend");
     };
 
     function countDown() {
@@ -27,7 +33,6 @@
     }
 
     onMount(() => {
-        console.log("hi");
         countDown();
     });
     onDestroy(() => {
@@ -37,6 +42,9 @@
 
 <div class="container">
     <a href="." on:click|preventDefault={reset} class="reset">start over</a>
+    {#if showLegendLink}
+        <a href="#" on:click|preventDefault={toggleLegend} class="legend-link">legend</a>
+    {/if}
     <div class="auto-reset"> 
         {#if seconds_remaining <= TIMER_DURATION_IN_SEC - TIMER_HIDDEN_FOR_SEC}
             starting over in {seconds_remaining}s
@@ -49,16 +57,25 @@
         text-align: center;
     }
 
-    a.reset {
+    a.reset, a.legend-link {
         display: inline-block;
         border: 1px solid #ccc;
         border-radius: 0.5rem;
         padding: 0.25rem 0.5rem;
-        margin: 0 3rem;
+        margin: 0 1rem;
         color: #999;
         text-decoration: none;
         font-size: 1.5rem;
     }
+
+    a.reset {
+        margin-left: 3rem;
+    }
+
+    a.legend-link {
+        margin-right: 3rem;
+    }
+
 
     div.auto-reset {
         font-size: 1rem;
